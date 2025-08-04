@@ -4,9 +4,9 @@
         <listener
                 class-name="framework.ExtentReportListener"/>
     </listeners>
-    <test name="DemoBlaze application test">
+    <test name="Playwright application test">
         <classes>
-            <class name="ui_regression.demoBlaze.UpperMenuTest"/>
+            <class name="ui_regression.playwright_automation.SampleTest"/>
         </classes>
     </test>
 </suite>

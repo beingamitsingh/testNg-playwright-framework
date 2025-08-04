@@ -1,26 +1,27 @@
 package ui_regression;
 
-import framework.Config;
-import framework.Report;
-import framework.WebDriverUtil;
-import org.openqa.selenium.WebDriver;
+import framework.report.TestRunnerListener;
+import framework.wrappers.TestWrapper;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
-public class TestRunner {
+@Listeners(TestRunnerListener.class)
+public class TestRunner extends TestWrapper {
 
-    public static WebDriver webDriver;
+    @BeforeSuite
+    public void loadConfigAndStartReport() {
+        TestWrapper.start();
+    }
 
-    @BeforeSuite(alwaysRun = true)
-    public static void setUp()  {
-        new Config();
-
-        Report.setExtent();
-        webDriver = WebDriverUtil.setBrowser(Config.getProperty("browser"));
+    @BeforeMethod
+    public void beforeMethod() {
+        test = extent.createTest(getClass().getSimpleName());
     }
 
     @AfterSuite
-    public void tearDown() {
-        Report.endReport();
+    public void afterSuite() {
+        TestWrapper.tearDown();
     }
 }
