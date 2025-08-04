@@ -2,7 +2,7 @@
 <suite name="Automation-Suite with Selenium and test-ng">
     <listeners>
         <listener
-                class-name="framework.ExtentReportListener"/>
+                class-name="framework.report.TestRunnerListener"/>
     </listeners>
     <test name="Playwright application test">
         <classes>

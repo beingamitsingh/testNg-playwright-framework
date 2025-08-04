@@ -40,8 +40,7 @@ public class TestRunnerListener extends TestWrapper implements ITestListener {
 
         // Log retry info if applicable
         Object retryAnalyzer = result.getMethod().getRetryAnalyzer(result);
-        if (retryAnalyzer instanceof RetryAnalyzer) {
-            RetryAnalyzer ra = (RetryAnalyzer) retryAnalyzer;
+        if (retryAnalyzer instanceof RetryAnalyzer ra) {
             test.log(Status.WARNING, "Retrying test. Attempt: " + (ra.retryCount + 1));
         }
 
