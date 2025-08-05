@@ -2,11 +2,11 @@
 <suite name="Automation-Suite with Selenium and test-ng">
     <listeners>
         <listener
-                class-name="framework.ExtentReportListener"/>
+                class-name="framework.report.TestRunnerListener"/>
     </listeners>
-    <test name="DemoBlaze application test">
+    <test name="Playwright application test">
         <classes>
-            <class name="ui_regression.demoBlaze.UpperMenuTest"/>
+            <class name="ui_regression.playwright_automation.SampleTest"/>
         </classes>
     </test>
 </suite>
