@@ -1,14 +1,20 @@
 package framework.report;
 
 import com.aventstack.extentreports.Status;
-import framework.util.ScreenshotUtil;
-import framework.wrappers.TestWrapper;
-import org.testng.ITestContext;
+import com.microsoft.playwright.Page;
+import framework.util.Engine;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.BeforeMethod;
 
-public class TestRunnerListener extends TestWrapper implements ITestListener {
+import java.io.File;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class TestRunnerListener extends Engine implements ITestListener {
+
+    private static final Logger logger = Logger.getLogger(TestRunnerListener.class.getName());
 
     @BeforeMethod
     public void setUp() {
@@ -24,32 +30,20 @@ public class TestRunnerListener extends TestWrapper implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         test.log(Status.PASS, "Test Passed");
-
-        String screenshotPath = framework.equals("selenium")
-                ? ScreenshotUtil.capture(driver)
-                : ScreenshotUtil.capture();
-
-        if (screenshotPath != null) {
-            test.addScreenCaptureFromPath(screenshotPath, "Success Screenshot");
-        }
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         test.log(Status.FAIL, "Test Failed: " + result.getThrowable());
+        String screenshotPath = capture();
+        if (screenshotPath != null) {
+            test.addScreenCaptureFromPath(screenshotPath, "Failure Screenshot");
+        }
 
         // Log retry info if applicable
         Object retryAnalyzer = result.getMethod().getRetryAnalyzer(result);
         if (retryAnalyzer instanceof RetryAnalyzer ra) {
             test.log(Status.WARNING, "Retrying test. Attempt: " + (ra.retryCount + 1));
-        }
-
-        String screenshotPath = framework.equals("selenium")
-                ? ScreenshotUtil.capture(driver)
-                : ScreenshotUtil.capture();
-
-        if (screenshotPath != null) {
-            test.addScreenCaptureFromPath(screenshotPath, "Failure Screenshot");
         }
     }
 
@@ -58,8 +52,14 @@ public class TestRunnerListener extends TestWrapper implements ITestListener {
         test.log(Status.SKIP, "Test Skipped: " + result.getName());
     }
 
-    @Override
-    public void onFinish(ITestContext context) {
-        extent.flush();
+    private String capture() {
+        String path = reportPath + UUID.randomUUID() + ".png";
+        try {
+            page.screenshot(new Page.ScreenshotOptions().setPath(new File(path).toPath()));
+            return path;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to capture screenshot with Playwright Page", e);
+            return null;
+        }
     }
 }

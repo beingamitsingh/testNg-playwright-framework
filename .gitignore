@@ -2,6 +2,7 @@
 *.class
 .idea
 test-output
+output
 
 # Log file
 *.log

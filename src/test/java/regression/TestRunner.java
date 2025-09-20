@@ -1,27 +1,23 @@
-package ui_regression;
+package regression;
 
 import framework.report.TestRunnerListener;
-import framework.wrappers.TestWrapper;
+import framework.util.Engine;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
 @Listeners(TestRunnerListener.class)
-public class TestRunner extends TestWrapper {
+public class TestRunner extends Engine {
+
+    public TestRunner() {}
 
     @BeforeSuite
     public void loadConfigAndStartReport() {
-        TestWrapper.start();
-    }
-
-    @BeforeMethod
-    public void beforeMethod() {
-        test = extent.createTest(getClass().getSimpleName());
+        initializeTestSuite();
     }
 
     @AfterSuite
     public void afterSuite() {
-        TestWrapper.tearDown();
+        tearDown();
     }
 }

@@ -4,9 +4,10 @@
         <listener
                 class-name="framework.report.TestRunnerListener"/>
     </listeners>
-    <test name="Playwright application test">
+    <test name="Parabank application test">
         <classes>
-            <class name="ui_regression.playwright_automation.SampleTest"/>
+            <class name="regression.automation_exercise.UserLogInTest"/>
+            <class name="regression.automation_exercise.UserRegistrationTest"/>
         </classes>
     </test>
 </suite>

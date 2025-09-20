@@ -2,14 +2,13 @@ package framework.report;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import framework.Config;
 
 public class ExtentManager {
     private static ExtentReports extent;
 
-    public static ExtentReports getInstance() {
+    public static ExtentReports getInstance(String reportPath) {
         if (extent == null) {
-            ExtentSparkReporter spark = new ExtentSparkReporter(Config.getProperty("REPORT_PATH") + "ExtentReport.html");
+            ExtentSparkReporter spark = new ExtentSparkReporter(reportPath + "/ExtentReport.html");
             extent = new ExtentReports();
             extent.attachReporter(spark);
         }

@@ -1,4 +1,4 @@
-package framework;
+package framework.util;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class Config {
 
     private static HashMap<String, String> data = new HashMap<>();
-    private static Properties prop = new Properties();
+    private static final Properties prop = new Properties();
 
     public Config()    {
         String sConfigFilePath = "src/test/resources/config.properties";
