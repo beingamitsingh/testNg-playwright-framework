@@ -25,7 +25,7 @@ public class RandomGen {
         }
         Random rnd = new Random();
         BigDecimal range = endVal.subtract(startVal);
-        BigDecimal randomFraction = new BigDecimal(rnd.nextDouble());
+        BigDecimal randomFraction = BigDecimal.valueOf(rnd.nextDouble());
         BigDecimal result = startVal.add(range.multiply(randomFraction));
         return result.setScale(Math.max(startVal.scale(), endVal.scale()), RoundingMode.HALF_UP);
     }

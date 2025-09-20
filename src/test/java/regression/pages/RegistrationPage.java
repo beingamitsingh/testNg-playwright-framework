@@ -19,8 +19,6 @@ public class RegistrationPage {
     private final Locator txtPassword;
     private final Locator txtConfirm;
     private final Locator btnRegister;
-
-    private final Locator btnCaptchaAccept;
     private final Locator lblRegistrationSuccessMessage;
 
     public RegistrationPage(Page page) {
@@ -37,7 +35,6 @@ public class RegistrationPage {
         this.txtPassword = page.locator("#customer\\.password");
         this.txtConfirm = page.locator("#repeatedPassword");
         this.btnRegister = page.locator("input[value='Register']");
-        this.btnCaptchaAccept = page.locator("text=Verify you are human");
         this.lblRegistrationSuccessMessage = page.locator("text=Your account was created successfully. You are now logged in.");
     }
 
