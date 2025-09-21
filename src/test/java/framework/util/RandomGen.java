@@ -7,7 +7,7 @@ import java.util.Random;
 public class RandomGen {
 
     public static String generateRandomString(int length) {
-        String chars = "abcdefghijklmnopqrstuvwxyz";
+        String chars = "_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {

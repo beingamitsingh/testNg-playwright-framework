@@ -3,6 +3,7 @@ package regression.automation_exercise;
 import com.microsoft.playwright.options.LoadState;
 import framework.util.Config;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import regression.TestRunner;
@@ -17,16 +18,22 @@ public class UserLogInTest extends TestRunner {
 
     @BeforeClass
     public void setUp() {
+        context = browser.newContext();
+        page = context.newPage();
         page.navigate(Config.getProperty("WEB_URL"));
         page.waitForLoadState(LoadState.NETWORKIDLE);
+        userName = Config.getProperty("WEB_USERNAME");
+        password = Config.getProperty("WEB_PASSWORD");
         LaunchPage launchPage = new LaunchPage(page);
-        if (launchPage.isConsentButtonDisplayed()) {
+        if (launchPage.isConsentButtonAccessible()) {
             launchPage.clickConsentButton();
         }
         launchPage.navigateToLogInPage();
+    }
 
-        userName = Config.getProperty("WEB_USERNAME");
-        password = Config.getProperty("WEB_PASSWORD");
+    @AfterClass
+    public void afterClass() {
+        context.close();
     }
 
     @Test

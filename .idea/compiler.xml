@@ -6,8 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="testNg-UI-framework" />
-        <module name="testNg-UI-test-framework" />
+        <module name="testNg-playwright-framework" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="18" />

@@ -27,12 +27,12 @@ public class LaunchPage {
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
     }
 
-    public void clickProductsButton() {
+    public void navigateToProductsPage() {
         btnProducts.click();
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
     }
 
-    public void clickContactUsButton() {
+    public void navigateToContactUsPage() {
         btnContactUs.click();
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
     }
@@ -42,6 +42,6 @@ public class LaunchPage {
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
     }
 
-    public boolean isConsentButtonDisplayed() { return btnConsent.isVisible(); }
+    public boolean isConsentButtonAccessible() { return btnConsent.isVisible() && btnConsent.isEnabled(); }
 
 }

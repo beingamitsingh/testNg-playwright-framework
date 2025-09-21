@@ -2,7 +2,10 @@ package framework.util;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.*;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import framework.report.ExtentManager;
 
 public class Engine {
@@ -10,24 +13,18 @@ public class Engine {
     public static Page page;
     public static ExtentTest test;
     private static final Playwright playwright = Playwright.create();
-    private Browser browser;
-    private BrowserContext context;
+    protected Browser browser;
     protected static ExtentReports extent;
     protected static String reportPath;
 
     public void initializeTestSuite() {
         new Config();
         browser = setBrowser(Config.getProperty("BROWSER"));
-        context = browser.newContext();
-        page = context.newPage();
-
         reportPath = Config.getProperty("REPORT_PATH") + "/Report_"  + System.currentTimeMillis();
         extent = ExtentManager.getInstance(reportPath);
     }
 
     public void tearDown() {
-        context.close();
-        browser.close();
         if (playwright != null) playwright.close();
         extent.flush();
     }
