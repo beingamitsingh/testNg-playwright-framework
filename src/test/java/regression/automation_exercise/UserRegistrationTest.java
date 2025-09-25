@@ -61,11 +61,15 @@ public class UserRegistrationTest extends TestRunner {
     }
 
     private static void fillRegistrationForm(RegistrationPage registrationPage) {
+        int year = RandomGen.getRandomYear(1900, 2024);
+        int month = RandomGen.getRandomMonth();
+        int day = RandomGen.getRandomDay(year, month);
+
         registrationPage.selectGenderMale();
         registrationPage.enterPassword(RandomGen.generateRandomString(10));
-        registrationPage.setDdlDateOfBirth_date("4");
-        registrationPage.setDdlDateOfBirth_month("11");
-        registrationPage.setDdlDateOfBirth_year("1996");
+        registrationPage.setDdlDateOfBirth_date(String.valueOf(day));
+        registrationPage.setDdlDateOfBirth_month(String.valueOf(month));
+        registrationPage.setDdlDateOfBirth_year(String.valueOf(year));
         registrationPage.enterFirstName("John");
         registrationPage.enterLastName("Doe");
         registrationPage.enterCompany("Company LLC");
