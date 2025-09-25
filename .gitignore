@@ -1,7 +1,6 @@
 # Compiled class file
 *.class
 .idea
-test-output
 output
 
 # Log file
