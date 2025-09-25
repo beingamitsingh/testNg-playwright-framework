@@ -1,4 +1,4 @@
-# Selenium & Playwright Test Automation Framework
+# Playwright Test Automation Framework
 
 This project is a test automation framework supporting Playwright, built with Java and Maven. It provides a unified interface for running UI tests across multiple browsers
 
