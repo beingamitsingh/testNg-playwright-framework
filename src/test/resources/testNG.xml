@@ -4,7 +4,7 @@
         <listener
                 class-name="framework.report.TestRunnerListener"/>
     </listeners>
-    <test name="Parabank application test">
+    <test name="Sample application test automation">
         <classes>
             <class name="regression.automation_exercise.UserLogInTest"/>
             <class name="regression.automation_exercise.UserRegistrationTest"/>
