@@ -1,25 +1,26 @@
-package regression.automation_exercise;
+package regression.user_management;
 
 import com.microsoft.playwright.options.LoadState;
 import framework.util.Config;
+import framework.util.Engine;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import regression.TestRunner;
-import regression.pages.HomePage;
-import regression.pages.LaunchPage;
-import regression.pages.LoginPage;
+import regression.object_repository.HomePage;
+import regression.object_repository.LaunchPage;
+import regression.object_repository.LoginPage;
 
-public class UserLogInTest extends TestRunner {
+public class UserLogInUITest extends Engine {
 
     private static String userName;
     private static String password;
 
     @BeforeClass
-    public void setUp() {
-        context = browser.newContext();
-        page = context.newPage();
+    public void beforeClass() {
+        createContextForClass();
+        page = getPage();
+
         page.navigate(Config.getProperty("WEB_URL"));
         page.waitForLoadState(LoadState.NETWORKIDLE);
         userName = Config.getProperty("WEB_USERNAME");
@@ -33,7 +34,7 @@ public class UserLogInTest extends TestRunner {
 
     @AfterClass
     public void afterClass() {
-        context.close();
+        closeContext();
     }
 
     @Test

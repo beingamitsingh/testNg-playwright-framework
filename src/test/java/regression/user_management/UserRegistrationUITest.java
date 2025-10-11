@@ -1,4 +1,4 @@
-package regression.automation_exercise;
+package regression.user_management;
 
 import com.microsoft.playwright.options.LoadState;
 import framework.util.Config;
@@ -9,17 +9,18 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import regression.TestRunner;
-import regression.pages.LaunchPage;
-import regression.pages.LoginPage;
-import regression.pages.RegistrationPage;
+import regression.UITestRunner;
+import regression.object_repository.LaunchPage;
+import regression.object_repository.LoginPage;
+import regression.object_repository.RegistrationPage;
 
-public class UserRegistrationTest extends TestRunner {
+public class UserRegistrationUITest extends UITestRunner {
 
     @BeforeClass
-    public void setUp(ITestContext iTestContext) {
-        context = browser.newContext();
-        page = context.newPage();
+    public void beforeClass(ITestContext iTestContext) {
+        createContextForClass();
+        page = getPage();
+
         page.navigate(Config.getProperty("WEB_URL"));
         page.waitForLoadState(LoadState.NETWORKIDLE);
         LaunchPage launchPage = new LaunchPage(page);
@@ -57,7 +58,7 @@ public class UserRegistrationTest extends TestRunner {
 
     @AfterClass
     public void afterClass() {
-        context.close();
+        closeContext();
     }
 
     private static void fillRegistrationForm(RegistrationPage registrationPage) {

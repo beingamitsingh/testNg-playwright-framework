@@ -1,35 +1,35 @@
 package framework.util;
 
 import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import framework.report.ExtentManager;
+import com.microsoft.playwright.*;
 
 public class Engine {
 
     public static Page page;
-    public static ExtentTest test;
-    private static final Playwright playwright = Playwright.create();
-    protected Browser browser;
+    private static Playwright playwright;
+    protected static Browser browser;
     protected static ExtentReports extent;
-    protected static String reportPath;
+
+    private static final ThreadLocal<BrowserContext> contextThread = new ThreadLocal<>();
+    private static final ThreadLocal<Page> pageThread = new ThreadLocal<>();
 
     public void initializeTestSuite() {
         new Config();
         browser = setBrowser(Config.getProperty("BROWSER"));
-        reportPath = Config.getProperty("REPORT_PATH") + "/Report_"  + System.currentTimeMillis();
-        extent = ExtentManager.getInstance(reportPath);
     }
 
     public void tearDown() {
-        if (playwright != null) playwright.close();
-        extent.flush();
+        if (browser != null) {
+            browser.close();
+            playwright.close();
+            browser = null;
+            playwright = null;
+        }
+        if (extent != null) extent.flush();
     }
 
     private Browser setBrowser(String browser)  {
+        playwright = Playwright.create();
         BrowserType.LaunchOptions options = new BrowserType.LaunchOptions().setSlowMo(50);
         return switch (browser.toLowerCase()) {
             case "chrome" -> playwright.chromium().launch(options.setChannel(browser));
@@ -37,5 +37,30 @@ public class Engine {
             case "safari" -> playwright.webkit().launch();
             default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
         };
+    }
+
+    public static void createContextForClass() {
+        BrowserContext context = browser.newContext();
+        Page page = context.newPage();
+        contextThread.set(context);
+        pageThread.set(page);
+    }
+
+    public static Page getPage() {
+        return pageThread.get();
+    }
+
+    public static BrowserContext getContext() {
+        return contextThread.get();
+    }
+
+    public static void closeContext() {
+        if (contextThread.get() != null) {
+            contextThread.get().close();
+            contextThread.remove();
+        }
+        if (pageThread.get() != null) {
+            pageThread.remove();
+        }
     }
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="Automation-Suite with Playwright and test-ng">
+<suite name="Automation-Suite with Playwright and test-ng" parallel="classes" thread-count="4">
     <listeners>
         <listener
                 class-name="framework.report.TestRunnerListener"/>
     </listeners>
     <test name="Sample application test">
         <classes>
-            <class name="regression.automation_exercise.UserLogInTest"/>
-            <class name="regression.automation_exercise.UserRegistrationTest"/>
+            <class name="regression.user_management.UserLogInUITest"/>
+            <class name="regression.user_management.UserRegistrationUITest"/>
         </classes>
     </test>
 </suite>

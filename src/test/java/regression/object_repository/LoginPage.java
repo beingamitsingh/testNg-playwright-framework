@@ -1,4 +1,4 @@
-package regression.pages;
+package regression.object_repository;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;

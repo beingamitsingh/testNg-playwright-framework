@@ -1,55 +1,84 @@
 package framework.report;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.microsoft.playwright.Page;
+import framework.util.Config;
 import framework.util.Engine;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
-import org.testng.annotations.BeforeMethod;
+import org.testng.*;
 
 import java.io.File;
+import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class TestRunnerListener extends Engine implements ITestListener {
+public class TestRunnerListener extends Engine implements ITestListener, ISuiteListener {
 
-    private static final Logger logger = Logger.getLogger(TestRunnerListener.class.getName());
+    private static String reportPath;
+    private static ExtentReports extent;
+    private static Map<String, ExtentTest> classLevelTests = new ConcurrentHashMap<>();
+    private static ThreadLocal<ExtentTest> testLevel;
 
-    @BeforeMethod
-    public void setUp() {
-        test = extent.createTest(getClass().getSimpleName());
+    @Override
+    public void onStart(ISuite suite) {
+        new Config();
+        reportPath = Config.getProperty("REPORT_PATH") + "/Report_"  + System.currentTimeMillis();
+        extent = ExtentManager.getInstance(reportPath);
+        extent.setSystemInfo("Suite", suite.getName());
+        testLevel = new ThreadLocal<>();
+    }
+
+    @Override
+    public void onStart(ITestContext context) {
+        String className = context.getAllTestMethods()[0].getRealClass().getSimpleName();
+        ExtentTest classNode = extent.createTest(className);
+        classLevelTests.put(className, classNode);
+    }
+
+    @Override
+    public void onFinish(ISuite suite) {
+        extent.flush();
     }
 
     @Override
     public void onTestStart(ITestResult result) {
-        test = extent.createTest(result.getMethod().getMethodName());
-        test.log(Status.INFO, "Test Started");
+        String className = result.getTestClass().getRealClass().getSimpleName();
+        ExtentTest parent = classLevelTests.get(className);
+        if (parent == null) {
+            synchronized (ExtentManager.class) {
+                parent = extent.createTest(className);
+                classLevelTests.put(className, parent);
+            }
+        }
+        ExtentTest child = parent.createNode(result.getMethod().getMethodName());
+        testLevel.set(child);
+        child.log(Status.INFO, "Starting test: " + result.getMethod().getMethodName());
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.log(Status.PASS, "Test Passed");
+        testLevel.get().log(Status.PASS, "Test Passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        test.log(Status.FAIL, "Test Failed: " + result.getThrowable());
+        testLevel.get().log(Status.FAIL, "Test Failed: " + result.getThrowable());
         String screenshotPath = capture();
         if (screenshotPath != null) {
-            test.addScreenCaptureFromPath(screenshotPath, "Failure Screenshot");
+            testLevel.get().addScreenCaptureFromPath(screenshotPath, "Failure Screenshot");
         }
 
         // Log retry info if applicable
         Object retryAnalyzer = result.getMethod().getRetryAnalyzer(result);
         if (retryAnalyzer instanceof RetryAnalyzer ra) {
-            test.log(Status.WARNING, "Retrying test. Attempt: " + (ra.retryCount + 1));
+            testLevel.get().log(Status.WARNING, "Retrying test. Attempt: " + (ra.retryCount + 1));
         }
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        test.log(Status.SKIP, "Test Skipped: " + result.getName());
+        testLevel.get().log(Status.SKIP, "Test Skipped: " + result.getName());
     }
 
     private String capture() {
@@ -58,8 +87,7 @@ public class TestRunnerListener extends Engine implements ITestListener {
             page.screenshot(new Page.ScreenshotOptions().setPath(new File(path).toPath()));
             return path;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Failed to capture screenshot with Playwright Page", e);
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
