@@ -38,8 +38,8 @@ public class RegistrationPage {
         this.frmRegistrationForm = page.locator("form[action='/signup']");
         this.rdbMale = page.locator("label[for='id_gender1']");
         this.rdbFemale = page.locator("label[for='id_gender2']");
-        this.txtName = page.locator("#name");
-        this.txtEmail = page.locator("#email");
+        this.txtName = page.locator("input[data-qa='name']");
+        this.txtEmail = page.locator("input[data-qa='email']");
         this.txtPassword = page.locator("#password");
         this.ddlDateOfBirth_date = page.locator("#days");
         this.ddlDateOfBirth_month = page.locator("#months");
