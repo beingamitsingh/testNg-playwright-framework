@@ -82,7 +82,7 @@ public class TestRunnerListener extends Engine implements ITestListener, ISuiteL
     }
 
     private String capture() {
-        String path = reportPath + UUID.randomUUID() + ".png";
+        String path = reportPath + "/screenshots/" + UUID.randomUUID() + ".png";
         try {
             page.screenshot(new Page.ScreenshotOptions().setPath(new File(path).toPath()));
             return path;
