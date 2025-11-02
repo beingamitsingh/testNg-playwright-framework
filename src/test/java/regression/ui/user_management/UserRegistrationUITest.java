@@ -1,4 +1,4 @@
-package regression.user_management;
+package regression.ui.user_management;
 
 import com.microsoft.playwright.options.LoadState;
 import framework.util.Config;
@@ -9,16 +9,16 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import regression.UITestRunner;
-import regression.object_repository.LaunchPage;
-import regression.object_repository.LoginPage;
-import regression.object_repository.RegistrationPage;
+import regression.ui.UITestRunner;
+import regression.ui.object_repository.LaunchPage;
+import regression.ui.object_repository.LoginPage;
+import regression.ui.object_repository.RegistrationPage;
 
 public class UserRegistrationUITest extends UITestRunner {
 
     @BeforeClass
     public void beforeClass(ITestContext iTestContext) {
-        createContextForClass();
+        createBrowserContext();
         page = getPage();
 
         page.navigate(Config.getProperty("WEB_URL"));

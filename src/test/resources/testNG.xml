@@ -4,10 +4,15 @@
         <listener
                 class-name="framework.report.TestRunnerListener"/>
     </listeners>
-    <test name="Sample application test">
+    <test name="UI tests">
         <classes>
-            <class name="regression.user_management.UserLogInUITest"/>
-            <class name="regression.user_management.UserRegistrationUITest"/>
+            <class name="regression.ui.user_management.UserLogInUITest"/>
+            <class name="regression.ui.user_management.UserRegistrationUITest"/>
+        </classes>
+    </test>
+    <test name="API tests">
+        <classes>
+            <class name="regression.api.book_store.BookStoreTest"/>
         </classes>
     </test>
 </suite>

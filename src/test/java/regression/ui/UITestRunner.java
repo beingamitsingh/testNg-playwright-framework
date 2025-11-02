@@ -1,7 +1,8 @@
-package regression;
+package regression.ui;
 
 import com.microsoft.playwright.BrowserContext;
 import framework.report.TestRunnerListener;
+import framework.util.Config;
 import framework.util.Engine;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -15,6 +16,7 @@ public class UITestRunner extends Engine {
     @BeforeSuite(alwaysRun = true)
     public void loadConfigAndStartReport() {
         initializeTestSuite();
+        browser = setBrowser(Config.getProperty("BROWSER"));
     }
 
     @AfterSuite(alwaysRun = true)

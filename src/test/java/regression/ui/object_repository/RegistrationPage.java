@@ -1,4 +1,4 @@
-package regression.object_repository;
+package regression.ui.object_repository;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;

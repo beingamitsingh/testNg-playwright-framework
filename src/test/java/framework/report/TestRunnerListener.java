@@ -8,7 +8,7 @@ import framework.util.Config;
 import framework.util.Engine;
 import org.testng.*;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +23,7 @@ public class TestRunnerListener extends Engine implements ITestListener, ISuiteL
     @Override
     public void onStart(ISuite suite) {
         new Config();
-        reportPath = Config.getProperty("REPORT_PATH") + "/Report_"  + System.currentTimeMillis();
+        reportPath = Config.getProperty("REPORT_FOLDER") + "/Report_"  + System.currentTimeMillis();
         extent = ExtentManager.getInstance(reportPath);
         extent.setSystemInfo("Suite", suite.getName());
         testLevel = new ThreadLocal<>();
@@ -78,14 +78,14 @@ public class TestRunnerListener extends Engine implements ITestListener, ISuiteL
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        testLevel.get().log(Status.SKIP, "Test Skipped: " + result.getName());
+        testLevel.get().log(Status.SKIP, "Test Skipped: " + result.getThrowable().getMessage());
     }
 
     private String capture() {
-        String path = reportPath + "/screenshots/" + UUID.randomUUID() + ".png";
+        String screenshotPath = reportPath + "/screenshots/" + UUID.randomUUID() + ".png";
         try {
-            page.screenshot(new Page.ScreenshotOptions().setPath(new File(path).toPath()));
-            return path;
+            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
+            return screenshotPath;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
