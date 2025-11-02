@@ -35,3 +35,4 @@ This project is a test automation framework supporting Playwright, built with Ja
 ## Reporting
 
 Test execution reports are generated using ExtentReports and can be found in the `test-output/` directory after running tests.
+<img width="1427" height="658" alt="Screenshot 2025-11-02 at 13 43 25" src="https://github.com/user-attachments/assets/7d3f749f-e489-4ebf-9d11-e77678050db8" />
