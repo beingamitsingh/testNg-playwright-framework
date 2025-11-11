@@ -12,7 +12,7 @@ public class Engine {
     protected static Browser browser;
     protected static ExtentReports extent;
 
-    private static final ThreadLocal<BrowserContext> contextThread = new ThreadLocal<>();
+    private static final ThreadLocal<BrowserContext> browserContextThread = new ThreadLocal<>();
     private static final ThreadLocal<Page> pageThread = new ThreadLocal<>();
     private static final ThreadLocal<APIRequestContext> apiContextThread = new ThreadLocal<>();
 
@@ -44,7 +44,7 @@ public class Engine {
     public static void createBrowserContext() {
         BrowserContext context = browser.newContext();
         Page page = context.newPage();
-        contextThread.set(context);
+        browserContextThread.set(context);
         pageThread.set(page);
     }
 
@@ -63,19 +63,24 @@ public class Engine {
         return pageThread.get();
     }
 
-    public static BrowserContext getContext() {
-        return contextThread.get();
+    public static BrowserContext getBrowserContext() {
+        return browserContextThread.get();
+    }
+
+    public static APIRequestContext getAPIContext() {
+        return apiContextThread.get();
     }
 
     public static void closeContext() {
-        if (getContext() != null) {
-            getContext().close();
-            contextThread.remove();
+        if (getBrowserContext() != null) {
+            getBrowserContext().close();
+            browserContextThread.remove();
         }
-        if (pageThread.get() != null) {
+        if (getPage() != null) {
             pageThread.remove();
         }
-        if (apiContextThread.get() != null) {
+        if (getAPIContext() != null) {
+            getAPIContext().dispose();
             apiContextThread.remove();
         }
     }

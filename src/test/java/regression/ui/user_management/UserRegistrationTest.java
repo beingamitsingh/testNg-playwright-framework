@@ -1,6 +1,7 @@
 package regression.ui.user_management;
 
-import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitUntilState;
 import framework.util.Config;
 import framework.util.RandomGen;
 import org.testng.Assert;
@@ -14,15 +15,14 @@ import regression.ui.object_repository.LaunchPage;
 import regression.ui.object_repository.LoginPage;
 import regression.ui.object_repository.RegistrationPage;
 
-public class UserRegistrationUITest extends UITestRunner {
+public class UserRegistrationTest extends UITestRunner {
 
     @BeforeClass
     public void beforeClass(ITestContext iTestContext) {
         createBrowserContext();
         page = getPage();
 
-        page.navigate(Config.getProperty("WEB_URL"));
-        page.waitForLoadState(LoadState.NETWORKIDLE);
+        page.navigate(Config.getProperty("WEB_URL"), new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         LaunchPage launchPage = new LaunchPage(page);
         if (launchPage.isConsentButtonAccessible()) { launchPage.clickConsentButton(); }
         launchPage.navigateToLogInPage();
